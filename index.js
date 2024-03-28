@@ -6,7 +6,7 @@ const supabase = createClient(supabaseUrl, supabaseKey)
 async function getWeekDaysAndWeather() {
   try {
     let { data: weekDaysWeather, error } = await supabase
-      .from('WeekDays')
+      .from('weather')
       .select('*');
 
     const weekDaysWeatherList = document.getElementById('week-days-weather');
