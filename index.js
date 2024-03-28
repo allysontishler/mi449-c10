@@ -5,19 +5,16 @@ const supabase = createClient(supabaseUrl, supabaseKey)
 
 async function getWeekDaysWeatherAndAccuracy() {
     try {
-      // Fetch data from 'weather' table
       let { data: weatherData } = await supabase
         .from('weather')
         .select('*');
   
-      // Fetch data from 'accuracy' table
       let { data: accuracyData } = await supabase
         .from('accuracy')
         .select('*');
   
       const tableBody = document.getElementById('week-days-weather');
   
-      // Loop through each day's data and add a row to the table
       weatherData.forEach((day, index) => {
         const row = document.createElement('tr');
         row.innerHTML = `
