@@ -1,1 +1,27 @@
-/* Add screen styles below */
+.container {
+    width: 50%; 
+    margin: auto;
+  }
+  
+  table {
+    margin-top: 50px;
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid black; 
+  }
+  
+  th, td {
+    border: 1px solid black; 
+    padding: 8px;
+  }
+  
+  th {
+    background-color: #8B0000; 
+    color: white; 
+    font-weight: bold; 
+  }
+  
+  tr:nth-child(even) {
+    background-color: #f2f2f2; 
+  }
+  

@@ -3,31 +3,36 @@ const supabaseUrl = 'https://swidosbmstlvrjawtmct.supabase.co'
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3aWRvc2Jtc3RsdnJqYXd0bWN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTE2NTIxMjgsImV4cCI6MjAyNzIyODEyOH0.KuxmeN-I_akCqgK1aqcpK5GZ1jP0Zmf9oLloXRaE3s8'
 const supabase = createClient(supabaseUrl, supabaseKey)
 
-function fetchWeatherData() {
-    return supabase.from('weather').select('*');
+async function getWeatherAndWeekDays() {
+    try {
+      // Fetch data from Supabase tables
+      let { data: weatherData, error: weatherError } = await supabase
+        .from('Weather')
+        .select('*');
+  
+      let { data: weekDaysData, error: weekDaysError } = await supabase
+        .from('WeekDays')
+        .select('*');
+  
+      const tableBody = document.getElementById('weather-weekdays');
+  
+      // Combine weather and week days data
+      weekDaysData.forEach(day => {
+        // Find corresponding weather for the day
+        const weatherForDay = weatherData.find(weather => weather.id === day.id);
+        if (weatherForDay) {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${day.day}</td>
+            <td>${weatherForDay.weather}</td>
+          `;
+          tableBody.appendChild(row);
+        }
+      });
+    } catch (error) {
+      console.error('Error fetching data:', error.message);
+    }
   }
   
-  function fetchWeekDayData() {
-    return supabase.from('week_days').select('*');
-  }
+  getWeatherAndWeekDays();
   
-  function displayWeatherForecast(weatherData, weekDaysData) {
-    const weatherForecastDiv = document.getElementById('weather-forecast');
-  
-    weekDaysData.forEach(day => {
-      const weatherForDay = weatherData.find(weather => weather.id === day.id);
-      const paragraph = document.createElement('p');
-      paragraph.textContent = `${day.day}: ${weatherForDay.weather}`;
-      weatherForecastDiv.appendChild(paragraph);
-    });
-  }
-  
-  fetchWeatherData()
-    .then(weatherData => {
-      fetchWeekDayData()
-        .then(weekDaysData => {
-          displayWeatherForecast(weatherData, weekDaysData);
-        })
-        .catch(error => console.error('Error fetching week days data:', error));
-    })
-    .catch(error => console.error('Error fetching weather data:', error));
