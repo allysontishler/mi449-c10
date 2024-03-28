@@ -16,23 +16,29 @@ async function getWeatherAndWeekDays() {
   
       const tableBody = document.getElementById('weather-weekdays');
   
-      // Combine weather and week days data
-      weekDaysData.forEach(day => {
-        // Find corresponding weather for the day
-        const weatherForDay = weatherData.find(weather => weather.id === day.id);
-        if (weatherForDay) {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${day.day}</td>
-            <td>${weatherForDay.weather}</td>
-          `;
-          tableBody.appendChild(row);
-        }
-      });
+      // Ensure both data sets are available
+      if (weatherData && weekDaysData) {
+        // Combine weather and week days data
+        weekDaysData.forEach(day => {
+          // Find corresponding weather for the day
+          const weatherForDay = weatherData.find(weather => weather.id === day.id);
+          if (weatherForDay) {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${day.day}</td>
+              <td>${weatherForDay.weather}</td>
+            `;
+            tableBody.appendChild(row);
+          }
+        });
+      } else {
+        console.error('Error: Unable to fetch data.');
+      }
     } catch (error) {
       console.error('Error fetching data:', error.message);
     }
   }
   
   getWeatherAndWeekDays();
+  
   
