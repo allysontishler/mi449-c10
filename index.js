@@ -11,7 +11,7 @@ async function getWeatherAndWeekDays() {
         .select('*');
   
       let { data: weekDaysData, error: weekDaysError } = await supabase
-        .from('WeekDays')
+        .from('Week Days')
         .select('*');
   
       const tableBody = document.getElementById('weather-weekdays');
