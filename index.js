@@ -6,34 +6,29 @@ const supabase = createClient(supabaseUrl, supabaseKey)
 async function getWeatherAndWeekDays() {
     try {
       // Fetch data from Supabase tables
-      let { data: weatherData, error: weatherError } = await supabase
+      const { data: weatherData } = await supabase
         .from('Weather')
         .select('*');
   
-      let { data: weekDaysData, error: weekDaysError } = await supabase
-        .from('Week Days')
+      const { data: weekDaysData } = await supabase
+        .from('WeekDays')
         .select('*');
   
       const tableBody = document.getElementById('weather-weekdays');
   
-      // Ensure both data sets are available
-      if (weatherData && weekDaysData) {
-        // Combine weather and week days data
-        weekDaysData.forEach(day => {
-          // Find corresponding weather for the day
-          const weatherForDay = weatherData.find(weather => weather.id === day.id);
-          if (weatherForDay) {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-              <td>${day.day}</td>
-              <td>${weatherForDay.weather}</td>
-            `;
-            tableBody.appendChild(row);
-          }
-        });
-      } else {
-        console.error('Error: Unable to fetch data.');
-      }
+      // Combine weather and week days data
+      weekDaysData.forEach(day => {
+        // Find corresponding weather for the day
+        const weatherForDay = weatherData.find(weather => weather.id === day.id);
+        if (weatherForDay) {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${day.day}</td>
+            <td>${weatherForDay.weather}</td>
+          `;
+          tableBody.appendChild(row);
+        }
+      });
     } catch (error) {
       console.error('Error fetching data:', error.message);
     }
